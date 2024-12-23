@@ -1,5 +1,6 @@
 import CameraIcon from "@mui/icons-material/Camera";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
+import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import ReceiptIcon from "@mui/icons-material/Receipt";
 import {
   Chip,
@@ -32,6 +33,7 @@ const TaskTable = ({ tasks }) => {
             <TableCell>Option</TableCell>
             <TableCell>Status</TableCell>
             <TableCell>Reward</TableCell>
+            <TableCell>Tx</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -54,16 +56,25 @@ const TaskTable = ({ tasks }) => {
                     variant="filled"
                   />
                 </TableCell>
-                {task.winner && (
-                  <TableCell>
-                    {" "}
+                <TableCell>
+                  {task.winner && (
                     <Chip
-                      label={`+ 0.000${(Math.random() * 100).toFixed(0)} BNB`}
+                      label={`+ ${task.reward} BNB`}
                       color={"success"}
                       variant="filled"
                     />
-                  </TableCell>
-                )}
+                  )}
+                </TableCell>
+                <TableCell>
+                  {task.tx && (
+                    <a
+                      target="_blank"
+                      href={`https://sepolia.etherscan.io/tx/${task.tx}`}
+                    >
+                      <InsertLinkIcon />
+                    </a>
+                  )}
+                </TableCell>
               </TableRow>
             );
           })}
