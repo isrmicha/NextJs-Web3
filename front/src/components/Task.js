@@ -22,7 +22,7 @@ const iconMap = {
   paper: <ReceiptIcon />,
   scissor: <ContentCutIcon />,
 };
-const TaskTable = ({ tasks, onDelete }) => {
+const TaskTable = ({ tasks }) => {
   return (
     <TableContainer component={Paper} className="task-table">
       <Table stickyHeader>
@@ -36,10 +36,9 @@ const TaskTable = ({ tasks, onDelete }) => {
         </TableHead>
         <TableBody>
           {tasks.map((task, index) => {
-            const isWin = task.status === "WIN";
             return (
               <TableRow key={task.id}>
-                <TableCell>#{task.id.toString()}</TableCell>
+                <TableCell>#{task.id}</TableCell>
                 <TableCell>
                   <Chip
                     icon={iconMap[task.input]}
@@ -48,14 +47,14 @@ const TaskTable = ({ tasks, onDelete }) => {
                 </TableCell>
                 <TableCell>
                   <Chip
-                    label={`${task.status} (${loseMap[
+                    label={`${task.winner ? "WIN" : "LOSE"} (${loseMap[
                       task.input
                     ]?.toUpperCase()})`}
-                    color={isWin ? "success" : "error"}
+                    color={task.winner ? "success" : "error"}
                     variant="filled"
                   />
                 </TableCell>
-                {isWin && (
+                {task.winner && (
                   <TableCell>
                     {" "}
                     <Chip

@@ -20,3 +20,9 @@ Account #19: 0x8626f6940E2eb28930eFb4CeF49B2d1F2C9C1199 (10000 ETH)
 Private Key: 0xdf57089febbacf7ba0bc227dafbffa9fc08a93fdc68e1e42411a14efcf23656e
 
 0x517e2CA3A5994EEeb7b04dBeb7a75d071C6FeDBe
+
+npx hardhat run scripts/deploy.js --network sepolia
+
+0xBF7e804023E50Ab21afC8cFf1204b4f18901ae03
+
+0xFD47722692D47FE48682d3e47c432c1A5e2782c3

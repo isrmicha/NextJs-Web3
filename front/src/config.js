@@ -1,1 +1,1 @@
-export const TaskContractAddress = "0x517e2CA3A5994EEeb7b04dBeb7a75d071C6FeDBe";
+export const TaskContractAddress = "0xFD47722692D47FE48682d3e47c432c1A5e2782c3";

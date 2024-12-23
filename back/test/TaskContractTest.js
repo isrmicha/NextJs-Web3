@@ -1,7 +1,7 @@
-const {expect} = require("chai");
-const {ethers} = require("hardhat");
+const { expect } = require("chai");
+const { ethers } = require("hardhat");
 
-describe("Task Contract", function() {
+describe("Task Contract", function () {
   let TaskContract;
   let taskContract;
   let owner;
@@ -10,55 +10,41 @@ describe("Task Contract", function() {
 
   let totalTasks;
 
-  beforeEach(async function() {
+  beforeEach(async function () {
     TaskContract = await ethers.getContractFactory("TaskContract");
     [owner] = await ethers.getSigners();
     taskContract = await TaskContract.deploy();
 
     totalTasks = [];
 
-    for(let i=0; i<NUM_TOTAL_TASKS; i++) {
+    for (let i = 0; i < NUM_TOTAL_TASKS; i++) {
       let task = {
-        'taskText': 'Task number:- ' + i,
-        'isDeleted': false
+        taskText: "Task number:- " + i,
+        winner: false,
       };
 
-      await taskContract.addTask(task.taskText, task.isDeleted);
+      await taskContract.addTask(task.taskText, task.winner);
       totalTasks.push(task);
     }
   });
 
-  describe("Add Task", function() {
-    it("should emit AddTask event", async function() {
+  describe("Add Task", function () {
+    it("should emit AddTask event", async function () {
       let task = {
-        'taskText': 'New Task',
-        'isDeleted': false
+        taskText: "New Task",
+        winner: false,
       };
 
-      await expect(await taskContract.addTask(task.taskText, task.isDeleted)
-    ).to.emit(taskContract, 'AddTask').withArgs(owner.address, NUM_TOTAL_TASKS);
-    })
+      await expect(await taskContract.addTask(task.taskText, task.winner))
+        .to.emit(taskContract, "AddTask")
+        .withArgs(owner.address, NUM_TOTAL_TASKS, task.winner);
+    });
   });
 
-  describe("Get All Tasks", function() {
-    it("should return the correct number of total tasks", async function() {
+  describe("Get All Tasks", function () {
+    it("should return the correct number of total tasks", async function () {
       const tasksFromChain = await taskContract.getMyTasks();
       expect(tasksFromChain.length).to.equal(NUM_TOTAL_TASKS);
-    })
-  })
-
-  describe("Delete Task", function() {
-    it("should emit delete task event", async function() {
-      const TASK_ID = 0;
-      const TASK_DELETED = true;
-
-      await expect(
-        taskContract.deleteTask(TASK_ID, TASK_DELETED)
-      ).to.emit(
-        taskContract, 'DeleteTask'
-      ).withArgs(
-        TASK_ID, TASK_DELETED
-      );
-    })
-  })
+    });
+  });
 });

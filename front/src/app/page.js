@@ -48,15 +48,15 @@ export default function Home() {
         );
 
         let allTasks = await TaskContract.methods.getMyTasks().call();
-        console.log(allTasks);
         allTasks = allTasks.map((task) => ({
-          id: task.id.toString(),
+          id: task.id,
           taskText: task.taskText,
           wallet: task.wallet,
           taskDate: new Date(task.taskDate * 1000).toLocaleDateString(),
           taskTime: new Date(task.taskDate * 1000).toLocaleTimeString(),
-          isDeleted: task.isDeleted,
+          winner: task.winner,
         }));
+        console.log(allTasks);
         setTasks(allTasks);
       } else {
         console.log("Ethereum object doesn't exist");
@@ -67,22 +67,11 @@ export default function Home() {
   };
 
   useEffect(() => {
+    connectWallet();
     getAllTasks();
   }, []);
-  const [testMap, setTestMap] = useState([]);
-  const test = () => {
-    setTestMap((test) => [
-      ...test,
-      {
-        id: test.length + 1,
-        input,
-        status: Math.random() < 0.33 ? "WIN" : "LOSE",
-      },
-    ]);
-  };
-  const rmTest = (index) => {
-    setTestMap((test) => test.filter((test, index2) => index !== index2));
-  };
+  const [taskMap, setTaskMap] = useState([]);
+
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -109,7 +98,6 @@ export default function Home() {
 
       console.log("Found account", accounts[0]);
       setCurrentAccount(accounts[0]);
-      toast.success("Wallet connected");
     } catch (error) {
       console.log("Error connecting to metamask", error);
     }
@@ -117,11 +105,11 @@ export default function Home() {
 
   const addTask = async (e) => {
     e.preventDefault();
-
+    const winner = Math.random() < 0.33;
     const task = {
-      id: tasks.length + 1,
-      taskText: input,
-      isDeleted: false,
+      id: taskMap.length + 1,
+      input,
+      winner,
     };
 
     try {
@@ -133,50 +121,17 @@ export default function Home() {
           TaskAbi.abi,
           TaskContractAddress
         );
-
         await TaskContract.methods
-          .addTask(task.taskText, task.isDeleted)
+          .addTask(task.input, winner)
           .send({ from: currentAccount });
-        setTasks([...tasks, task]);
-        setInput("");
-        toast.success("Task added");
+        setTaskMap((tasks) => [...tasks, task]);
+        toast.success("Game added");
       } else {
         console.log("Ethereum object doesn't exist!");
       }
     } catch (error) {
       console.log("Error submitting new Task", error);
       toast.error("Error adding task");
-    }
-  };
-
-  const deleteTask = async (taskId) => {
-    try {
-      const { ethereum } = window;
-
-      if (ethereum) {
-        const web3 = new Web3(ethereum);
-        const TaskContract = new web3.eth.Contract(
-          TaskAbi.abi,
-          TaskContractAddress
-        );
-
-        await TaskContract.methods
-          .deleteTask(taskId, true)
-          .send({ from: currentAccount });
-
-        // Mettre à jour la liste des tâches localement
-        const updatedTasks = tasks.map((task) =>
-          task.id === taskId.toString() ? { ...task, isDeleted: true } : task
-        );
-
-        setTasks(updatedTasks);
-        toast.success("Task deleted");
-      } else {
-        console.log("Ethereum object doesn't exist");
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error("Error deleting task");
     }
   };
 
@@ -187,7 +142,7 @@ export default function Home() {
         <AppBar position="static">
           <Toolbar>
             <Typography variant="h6" style={{ flexGrow: 1 }}>
-              rock-paper-scissors
+              Rock-Paper-Scissors
             </Typography>
             {currentAccount === "" ? (
               <Button color="inherit" onClick={connectWallet}>
@@ -217,13 +172,9 @@ export default function Home() {
             </Box>
           ) : correctNetwork ? (
             <Box mt={4}>
-              <Typography variant="h4" align="center" gutterBottom>
-                {" "}
-                rock-paper-scissors{" "}
-              </Typography>
               <Box
                 component="form"
-                // onSubmit={addTask}
+                onSubmit={addTask}
                 display="flex"
                 justifyContent="center"
                 mb={2}
@@ -246,16 +197,11 @@ export default function Home() {
                   </Select>
                 </FormControl>
 
-                <Button variant="contained" color="primary" onClick={test}>
-                  Play Demo!
+                <Button variant="contained" color="primary" type="submit">
+                  Play!
                 </Button>
-                {/* <Button variant="contained" color="primary" type="submit">
-                Play!
-              </Button> */}
               </Box>
-              {!!testMap?.length && (
-                <TaskTable tasks={testMap} onDelete={rmTest} />
-              )}
+              {!!taskMap?.length && <TaskTable tasks={taskMap} />}
             </Box>
           ) : (
             <Box
