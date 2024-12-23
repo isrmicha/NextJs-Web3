@@ -74,9 +74,10 @@ export default function Home({ findMany, create }) {
       let chainId = await ethereum.request({ method: "eth_chainId" });
       console.log("Connected to chain:" + chainId);
 
-      const sepoliaChainId = "0xaa36a7";
+      //   const sepoliaChainId = "0xaa36a7";
+      const localChainId = "0x7a69";
 
-      if (chainId !== sepoliaChainId) {
+      if (chainId !== localChainId) {
         alert("You are not connected to the Sepolia Testnet!");
         return;
       } else {

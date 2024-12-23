@@ -4,8 +4,8 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "rock-paper-scissors",
-  description: "rock-paper-scissors",
+  title: "Rock Paper Scissors",
+  description: "Rock Paper Scissors Web3 Game",
 };
 
 export default function RootLayout({ children }) {

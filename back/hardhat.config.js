@@ -20,9 +20,17 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 module.exports = {
   solidity: "0.8.4",
   networks: {
-    sepolia: {
-      url: process.env.ALCHEMY_SEPOLIA_URL,
-      accounts: [`${process.env.ACCOUNT_PRIVATE_KEY}`],
+    // sepolia: {
+    //   url: process.env.ALCHEMY_URL,
+    //   accounts: [`${process.env.ACCOUNT_PRIVATE_KEY}`],
+    // },
+
+    local: {
+      chainId: 31337,
+      url: "http://127.0.0.1:8545/",
+      accounts: {
+        mnemonic: "test test test test test test test test test test test junk",
+      },
     },
   },
 };
