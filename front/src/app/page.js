@@ -4,24 +4,35 @@ import {
   Box,
   Button,
   Container,
+  createTheme,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  ThemeProvider,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Web3 from "web3";
 import TaskTable from "../components/Task";
 import { TaskContractAddress } from "../config";
 import TaskAbi from "../utils/TaskContract.json";
 
+export const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#19d2a9",
+    },
+  },
+});
+
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [input, setInput] = useState("rock");
+  const [balance, setBalance] = useState(0);
   const [currentAccount, setCurrentAccount] = useState("");
   const [correctNetwork, setCorrectNetwork] = useState(false);
 
@@ -170,88 +181,97 @@ export default function Home() {
   };
 
   return (
-    <div>
-      <ToastContainer />
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            rock-paper-scissors
-          </Typography>
-          {currentAccount === "" ? (
-            <Button color="inherit" onClick={connectWallet}>
-              Connect Wallet
-            </Button>
-          ) : (
-            <Typography variant="h6">{currentAccount}</Typography>
-          )}
-        </Toolbar>
-      </AppBar>
-      <Container>
-        {currentAccount === "" ? (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="100vh"
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={connectWallet}
-            >
-              Connect Wallet
-            </Button>
-          </Box>
-        ) : correctNetwork ? (
-          <Box mt={4}>
-            <Typography variant="h4" align="center" gutterBottom>
-              {" "}
-              rock-paper-scissors{" "}
+    <ThemeProvider theme={theme}>
+      <div>
+        <ToastContainer />
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6" style={{ flexGrow: 1 }}>
+              rock-paper-scissors
             </Typography>
+            {currentAccount === "" ? (
+              <Button color="inherit" onClick={connectWallet}>
+                Connect Wallet
+              </Button>
+            ) : (
+              <Typography variant="h6">{currentAccount}</Typography>
+            )}
+          </Toolbar>
+        </AppBar>
+        <Container>
+          {currentAccount === "" ? (
             <Box
-              component="form"
-              // onSubmit={addTask}
               display="flex"
               justifyContent="center"
-              mb={2}
+              alignItems="center"
+              height="100vh"
             >
-              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel id="demo-simple-select-standard-label">
-                  Choose
-                </InputLabel>
-
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard-label"
-                  value={input}
-                  label="Choose"
-                  onChange={(e) => setInput(e.target.value)}
-                >
-                  <MenuItem value={"rock"}>Rock</MenuItem>
-                  <MenuItem value={"paper"}>Paper</MenuItem>
-                  <MenuItem value={"scissor"}>Scissor</MenuItem>
-                </Select>
-              </FormControl>
-
-              <Button variant="contained" color="primary" onClick={test}>
-                Play Demo!
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={connectWallet}
+              >
+                Connect Wallet
               </Button>
-              {/* <Button variant="contained" color="primary" type="submit">
+            </Box>
+          ) : correctNetwork ? (
+            <Box mt={4}>
+              <Typography variant="h4" align="center" gutterBottom>
+                {" "}
+                rock-paper-scissors{" "}
+              </Typography>
+              <Box
+                component="form"
+                // onSubmit={addTask}
+                display="flex"
+                justifyContent="center"
+                mb={2}
+              >
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                  <InputLabel id="demo-simple-select-standard-label">
+                    Choose
+                  </InputLabel>
+
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard-label"
+                    value={input}
+                    label="Choose"
+                    onChange={(e) => setInput(e.target.value)}
+                  >
+                    <MenuItem value={"rock"}>Rock</MenuItem>
+                    <MenuItem value={"paper"}>Paper</MenuItem>
+                    <MenuItem value={"scissor"}>Scissor</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <Button variant="contained" color="primary" onClick={test}>
+                  Play Demo!
+                </Button>
+                {/* <Button variant="contained" color="primary" type="submit">
                 Play!
               </Button> */}
+              </Box>
+              {!!testMap?.length && (
+                <TaskTable tasks={testMap} onDelete={rmTest} />
+              )}
             </Box>
-            <TaskTable tasks={testMap} onDelete={rmTest} />
-          </Box>
-        ) : (
-          <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
-            <Typography variant="h6" color="error">
-              Please connect to the Sepolia Testnet
-            </Typography>
-            <Typography variant="subtitle1">and reload the page</Typography>
-          </Box>
-        )}
-      </Container>
-    </div>
+          ) : (
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              mt={4}
+            >
+              <Typography variant="h6" color="error">
+                Please connect to the Sepolia Testnet
+              </Typography>
+              <Typography variant="subtitle1">and reload the page</Typography>
+            </Box>
+          )}
+        </Container>
+      </div>
+    </ThemeProvider>
   );
 }
