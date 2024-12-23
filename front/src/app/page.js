@@ -1,12 +1,13 @@
 "use client";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
   Box,
   Button,
   Container,
-  IconButton,
-  TextField,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -20,7 +21,7 @@ import TaskAbi from "../utils/TaskContract.json";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState("rock");
   const [currentAccount, setCurrentAccount] = useState("");
   const [correctNetwork, setCorrectNetwork] = useState(false);
 
@@ -57,7 +58,20 @@ export default function Home() {
   useEffect(() => {
     getAllTasks();
   }, []);
-
+  const [testMap, setTestMap] = useState([]);
+  const test = () => {
+    setTestMap((test) => [
+      ...test,
+      {
+        id: test.length + 1,
+        input,
+        status: Math.random() < 0.33 ? "WIN" : "LOSE",
+      },
+    ]);
+  };
+  const rmTest = (index) => {
+    setTestMap((test) => test.filter((test, index2) => index !== index2));
+  };
   const connectWallet = async () => {
     try {
       const { ethereum } = window;
@@ -160,11 +174,8 @@ export default function Home() {
       <ToastContainer />
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" style={{ flexGrow: 1 }}>
-            TodoList DApp
+            rock-paper-scissors
           </Typography>
           {currentAccount === "" ? (
             <Button color="inherit" onClick={connectWallet}>
@@ -196,31 +207,41 @@ export default function Home() {
           <Box mt={4}>
             <Typography variant="h4" align="center" gutterBottom>
               {" "}
-              TodoList DApp{" "}
+              rock-paper-scissors{" "}
             </Typography>
             <Box
               component="form"
-              onSubmit={addTask}
+              // onSubmit={addTask}
               display="flex"
               justifyContent="center"
               mb={2}
             >
-              <TextField
-                id="outlined-basic"
-                label="New Task"
-                variant="outlined"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                style={{ marginRight: 8 }}
-              />
-              <Button variant="contained" color="primary" type="submit">
-                Add Task
+              <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-simple-select-standard-label">
+                  Choose
+                </InputLabel>
+
+                <Select
+                  labelId="demo-simple-select-standard-label"
+                  id="demo-simple-select-standard-label"
+                  value={input}
+                  label="Choose"
+                  onChange={(e) => setInput(e.target.value)}
+                >
+                  <MenuItem value={"rock"}>Rock</MenuItem>
+                  <MenuItem value={"paper"}>Paper</MenuItem>
+                  <MenuItem value={"scissor"}>Scissor</MenuItem>
+                </Select>
+              </FormControl>
+
+              <Button variant="contained" color="primary" onClick={test}>
+                Play Demo!
               </Button>
-              <Button variant="contained" color="primary" onClick={getAllTasks}>
-                Get All Tasks
-              </Button>
+              {/* <Button variant="contained" color="primary" type="submit">
+                Play!
+              </Button> */}
             </Box>
-            <TaskTable tasks={tasks} onDelete={deleteTask} />
+            <TaskTable tasks={testMap} onDelete={rmTest} />
           </Box>
         ) : (
           <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
