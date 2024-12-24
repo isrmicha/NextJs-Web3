@@ -32,5 +32,19 @@ module.exports = {
         mnemonic: "test test test test test test test test test test test junk",
       },
     },
+
+    testnet: {
+      url: "https://data-seed-prebsc-1-s1.bnbchain.org:8545",
+      chainId: 97,
+      gasPrice: 20000000000,
+      accounts: { mnemonic: `${process.env.mnemonic}` },
+    },
+
+    etherscan: {
+      // Your API key for Etherscan
+      // Obtain one at https://bscscan.com/
+      url: "https://api-testnet.bscscan.com/api",
+      apiKey: `${process.env.bscscanApiKey}`,
+    },
   },
 };

@@ -73,12 +73,12 @@ export default function Home({ findMany, create }) {
       }
       let chainId = await ethereum.request({ method: "eth_chainId" });
       console.log("Connected to chain:" + chainId);
-
+      const bscChainId = "0x61";
       //   const sepoliaChainId = "0xaa36a7";
-      const localChainId = "0x7a69";
+      // const localChainId = "0x7a69";
 
-      if (chainId !== localChainId) {
-        alert("You are not connected to the Sepolia Testnet!");
+      if (chainId !== bscChainId) {
+        alert("You are not connected to the BSC Testnet!");
         return;
       } else {
         setCorrectNetwork(true);
@@ -153,7 +153,7 @@ export default function Home({ findMany, create }) {
             ) : (
               <Typography variant="h6">
                 <Chip
-                  label={`Balance: ${balance} BNB`}
+                  label={`Balance: ${balance.toFixed(6)} BNB`}
                   color={"success"}
                   variant="filled"
                 />
