@@ -143,8 +143,18 @@ export default function Home({ findMany, create }) {
         <ToastContainer />
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="h6" style={{ flexGrow: 1 }}>
-              Rock-Paper-Scissors
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{
+                flexGrow: 1,
+                color: "white",
+                letterSpacing: 0.1,
+                fontWeight: "bold",
+                textShadow: "1px 1px 1px rgba(0,0,0,0.5)",
+              }}
+            >
+              Rock Paper Scissors
             </Typography>
             {currentAccount === "" ? (
               <Button color="inherit" onClick={connectWallet}>
