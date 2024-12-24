@@ -1,5 +1,7 @@
-require("@nomiclabs/hardhat-waffle");
 require("dotenv").config();
+require("@nomiclabs/hardhat-waffle");
+require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-etherscan");
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -19,6 +21,14 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
  */
 module.exports = {
   solidity: "0.8.4",
+  etherscan: {
+    // Your API key for Etherscan
+    // Obtain one at https://bscscan.com/
+    url: "https://api-testnet.bscscan.com/api",
+    apiKey: {
+      bscTestnet: `${process.env.bscscanApiKey}`,
+    },
+  },
   networks: {
     // sepolia: {
     //   url: process.env.ALCHEMY_URL,
@@ -38,13 +48,6 @@ module.exports = {
       chainId: 97,
       gasPrice: 20000000000,
       accounts: { mnemonic: `${process.env.mnemonic}` },
-    },
-
-    etherscan: {
-      // Your API key for Etherscan
-      // Obtain one at https://bscscan.com/
-      url: "https://api-testnet.bscscan.com/api",
-      apiKey: `${process.env.bscscanApiKey}`,
     },
   },
 };

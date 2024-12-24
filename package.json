@@ -16,7 +16,8 @@
     "local": "cd back && npx hardhat run scripts/local.js --network local",
     "deploy": "cd back && npx hardhat test && npx hardhat run scripts/deploy.js --network local",
     "deploy:bsc": "cd back && npx hardhat test && npx hardhat run scripts/deploy.js --network testnet",
-    "compile": "cd back && npx hardhat clean && npx hardhat compile"
+    "compile": "cd back && npx hardhat clean && npx hardhat compile",
+    "verify": "cd back && npx hardhat verify --network testnet 0xefD24f4811B6C94c339340eB874b401d36304A8a"
   },
   "dependencies": {
     "npm-run-all": "^4.1.5"
