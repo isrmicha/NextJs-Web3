@@ -21,9 +21,10 @@ describe("Task Contract", function () {
       let task = {
         taskText: "Task number:- " + i,
         winner: false,
+        reward: 10,
       };
 
-      await taskContract.addTask(task.taskText, task.winner);
+      await taskContract.addTask(task.taskText, task.winner, 10);
       totalTasks.push(task);
     }
   });
@@ -35,9 +36,9 @@ describe("Task Contract", function () {
         winner: false,
       };
 
-      await expect(await taskContract.addTask(task.taskText, task.winner))
+      await expect(await taskContract.addTask(task.taskText, task.winner, 10))
         .to.emit(taskContract, "AddTask")
-        .withArgs(owner.address, NUM_TOTAL_TASKS, task.winner);
+        .withArgs(owner.address, NUM_TOTAL_TASKS, task.winner, 10);
     });
   });
 
@@ -45,6 +46,12 @@ describe("Task Contract", function () {
     it("should return the correct number of total tasks", async function () {
       const tasksFromChain = await taskContract.getMyTasks();
       expect(tasksFromChain.length).to.equal(NUM_TOTAL_TASKS);
+    });
+  });
+  describe("Get my balance", function () {
+    it("should return the correct number of total balance", async function () {
+      const balance = await taskContract.myBalance();
+      expect(balance).to.equal(50);
     });
   });
 });

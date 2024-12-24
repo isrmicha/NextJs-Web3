@@ -1,3 +1,4 @@
+import { TO_FIXED_CONST, withBNBMultiplier } from "@/config";
 import CameraIcon from "@mui/icons-material/Camera";
 import ContentCutIcon from "@mui/icons-material/ContentCut";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
@@ -59,7 +60,9 @@ const TaskTable = ({ tasks }) => {
                 <TableCell>
                   {task.winner && (
                     <Chip
-                      label={`+ ${task.reward} BNB`}
+                      label={`+ ${withBNBMultiplier(task.reward).toFixed(
+                        TO_FIXED_CONST
+                      )} BNB`}
                       color={"success"}
                       variant="filled"
                     />

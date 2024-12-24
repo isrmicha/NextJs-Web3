@@ -1,5 +1,9 @@
 "use client";
-import { TaskContractAddress } from "@/config";
+import {
+  TaskContractAddress,
+  TO_FIXED_CONST,
+  withBNBMultiplier,
+} from "@/config";
 import {
   AppBar,
   Box,
@@ -41,14 +45,11 @@ export default function Home({ findMany, create }) {
 
   const getAllTasks = async () => {
     setIsLoading(true);
+    const balance = await myBalance();
     findMany(currentAccount)
       .then((result) => {
         setTasks(result);
-        setBalance(
-          result.reduce((prev, curr) => {
-            return (prev = prev + curr.reward);
-          }, 0)
-        );
+        setBalance(withBNBMultiplier(balance));
       })
       .finally(() => setIsLoading(false));
   };
@@ -56,11 +57,22 @@ export default function Home({ findMany, create }) {
   const bootstrap = async () => {
     await connectWallet();
   };
+  const myBalance = async () => {
+    const web3 = new Web3(ethereum);
+    const TaskContract = new web3.eth.Contract(
+      TaskAbi.abi,
+      TaskContractAddress
+    );
+    const result = await TaskContract.methods.myBalance().call();
+    return Number(result);
+  };
   useEffect(() => {
     bootstrap();
   }, []);
   useEffect(() => {
-    if (currentAccount) getAllTasks();
+    if (currentAccount) {
+      getAllTasks();
+    }
   }, [currentAccount]);
 
   const connectWallet = async () => {
@@ -99,10 +111,13 @@ export default function Home({ findMany, create }) {
     e.preventDefault();
     setIsLoading(true);
     const winner = Math.random() < 0.33;
+    const reward = winner ? Number((Math.random() * 100).toFixed(0)) : 0;
+
     const task = {
       id: tasks.length + 1,
       input,
       winner,
+      reward,
     };
 
     try {
@@ -115,14 +130,13 @@ export default function Home({ findMany, create }) {
           TaskContractAddress
         );
         const result = await TaskContract.methods
-          .addTask(task.input, winner)
+          .addTask(task.input, winner, reward)
           .send({ from: currentAccount });
-        const reward = Number(`0.000${(Math.random() * 100).toFixed(0)}`);
         await create({
           input: task.input,
           winner: task.winner,
           owner: currentAccount,
-          reward: task.winner ? reward : 0,
+          reward: reward,
           tx: result.transactionHash,
         });
 
@@ -163,7 +177,7 @@ export default function Home({ findMany, create }) {
             ) : (
               <Typography variant="h6">
                 <Chip
-                  label={`Balance: ${balance.toFixed(6)} BNB`}
+                  label={`Balance: ${balance.toFixed(TO_FIXED_CONST)} BNB`}
                   color={"success"}
                   variant="filled"
                 />

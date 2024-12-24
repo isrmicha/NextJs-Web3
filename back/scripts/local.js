@@ -11,5 +11,7 @@
   //   console.log(await contract.addTask("scissor", true));
   //   console.log(await contract.addTask("rock", false));
   //   console.log(await contract.addTask("rock", false));
-  console.log(await contract.getMyTasks());
+  const balance = await contract.myBalance();
+  // console.log(111, Number(balance._hex));
+  // console.log(await contract.myBalance());
 })();
