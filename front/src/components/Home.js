@@ -45,11 +45,16 @@ export default function Home({ findMany, create }) {
 
   const getAllTasks = async () => {
     setIsLoading(true);
-    const balance = await myBalance();
     findMany(currentAccount)
       .then((result) => {
         setTasks(result);
-        setBalance(withBNBMultiplier(balance));
+        setBalance(
+          withBNBMultiplier(
+            result.reduce((prev, curr) => {
+              return (prev = prev + curr.reward);
+            }, 0)
+          )
+        );
       })
       .finally(() => setIsLoading(false));
   };
@@ -57,15 +62,7 @@ export default function Home({ findMany, create }) {
   const bootstrap = async () => {
     await connectWallet();
   };
-  const myBalance = async () => {
-    const web3 = new Web3(ethereum);
-    const TaskContract = new web3.eth.Contract(
-      TaskAbi.abi,
-      TaskContractAddress
-    );
-    const result = await TaskContract.methods.myBalance().call();
-    return Number(result);
-  };
+
   useEffect(() => {
     bootstrap();
   }, []);
@@ -86,7 +83,7 @@ export default function Home({ findMany, create }) {
       let chainId = await ethereum.request({ method: "eth_chainId" });
       console.log("Connected to chain:" + chainId);
       const bscChainId = "0x61";
-      //   const sepoliaChainId = "0xaa36a7";
+      // const sepoliaChainId = "0xaa36a7";
       // const localChainId = "0x7a69";
 
       if (chainId !== bscChainId) {
