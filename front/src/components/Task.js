@@ -69,7 +69,7 @@ const TaskTable = ({ tasks }) => {
                   {task.tx && (
                     <a
                       target="_blank"
-                      href={`https://sepolia.etherscan.io/tx/${task.tx}`}
+                      href={`https://testnet.bscscan.com/tx/${task.tx}`}
                     >
                       <InsertLinkIcon />
                     </a>
