@@ -163,6 +163,12 @@ Foster a community through forums, social media, and events.
 
 Encourage user-generated content and feedback.
 
+## Phase 6: ERC-20 Token $RPS
+
+In the near future we will create a new token on the BSC mainnet with the symbol $RPS for be the main currency.
+
+The burning system will be that every BNB bet lost on every lose game will be BURNED.
+
 ## Conclusion
 
 This roadmap provides a clear path from conception to launch and beyond for your Web3 Rock Paper Scissors game. Each phase is crucial for ensuring a successful and engaging user experience.
