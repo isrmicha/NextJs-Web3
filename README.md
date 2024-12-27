@@ -1,5 +1,8 @@
 ## Web3 Rock Paper Scissors Game
 
+![image](https://github.com/user-attachments/assets/26118c9f-322b-43cd-a095-f23931aee903)
+
+
 > This repository contains the code for a decentralized Rock Paper
 
 > Scissors game built on the BSC testnet blockchain.
